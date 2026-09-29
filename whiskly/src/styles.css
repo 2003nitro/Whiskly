@@ -1,3 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+:root {
+  --bg: #12100e;
+  --surface: #1c1917;
+  --surface-hover: #26211d;
+  --border: #2e2823;
+  --text: #f3ede6;
+  --muted: #a39a90;
+  --accent: #f0a04b;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 1rem 1.25rem;
+  background: rgba(18, 16, 14, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}

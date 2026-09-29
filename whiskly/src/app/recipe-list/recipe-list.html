@@ -1,1 +1,36 @@
-<p>recipe-list works!</p>
+<h1 class="page-title">All Recipes</h1>
+
+@if (loading()) {
+  <p class="status">Loading recipes...</p>
+} @else if (error()) {
+  <p class="status error">Couldn't load recipes. Try refreshing the page.</p>
+} @else if (recipes().length === 0) {
+  <p class="status">No recipes yet.</p>
+} @else {
+  <p class="subtitle">{{ recipes().length }} saved</p>
+
+  <ul class="grid">
+    @for (r of recipes(); track r.id) {
+      <li class="card">
+        <h2 class="title">{{ r.title }}</h2>
+
+        <div class="meta">
+          @if (r.total_minutes) {
+            <span class="pill time">⏱ {{ formatTime(r.total_minutes) }}</span>
+          }
+          @if (r.servings) {
+            <span class="pill">{{ r.servings }} {{ r.yield_unit }}</span>
+          }
+        </div>
+
+        @if (r.tags.length) {
+          <div class="tags">
+            @for (t of r.tags; track t) {
+              <span class="tag">{{ t }}</span>
+            }
+          </div>
+        }
+      </li>
+    }
+  </ul>
+}

@@ -3,18 +3,8 @@ import { RecipeService, RecipeSummary } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
-  template: `
-    @if (loading()) { <p>Loading recipes...</p> }
-    @if (error()) { <p>Couldn't load recipes.</p> }
-    <ul>
-      @for (r of recipes(); track r.id) {
-        <li>
-          <strong>{{ r.title }}</strong>
-          <span> · makes {{ r.servings }} {{ r.yield_unit }} · {{ r.total_minutes }} min</span>
-        </li>
-      }
-    </ul>
-  `,
+  templateUrl: './recipe-list.html',
+  styleUrl: './recipe-list.css',
 })
 export class RecipeList {
   private service = inject(RecipeService);
@@ -27,5 +17,12 @@ export class RecipeList {
       .then(r => this.recipes.set(r))
       .catch(() => this.error.set(true))
       .finally(() => this.loading.set(false));
+  }
+
+  formatTime(minutes: number): string {
+    if (minutes < 60) return `${minutes} min`;
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return m ? `${h} hr ${m} min` : `${h} hr`;
   }
 }
