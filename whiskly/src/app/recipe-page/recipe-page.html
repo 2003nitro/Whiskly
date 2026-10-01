@@ -24,21 +24,37 @@
 
       <div class="layout">
         <section class="panel">
-          <h2>Ingredients</h2>
-          @for (g of sections(); track g.name) {
+          <div class="panel-head">
+            <h2>Ingredients</h2>
+            <span class="count">{{ checkedCount() }} of {{totalIngredients() }} on hand</span>
+          </div>
+
+          @if (totalIngredients() > 0 && checkedCount() === totalIngredients()) {
+            <p class="all-set">✓ You have everything</p>
+          }
+          @if (checkedCount() > 0){
+            <button type="button" class="clear" (click)="clearChecks()">Clear all </button>
+          }
+
+          @for (g of sections(); track g.name){
             @if (g.name) { <h3 class="section-name">{{ g.name }}</h3> }
             <ul class="ingredients">
-              @for (i of g.items; track $index) {
-                <li>
-                  <span class="qty">{{ formatQty(i.quantity) }}</span>
-                  @if (i.unit) { {{ i.unit }} }
-                  {{ i.ingredients.name }}
-                  @if (i.grams) { <span class="muted">({{ i.grams }} g)</span> }
-                  @if (i.note) { <span class="muted">, {{ i.note }}</span> }
+              @for (i of g.items; track i.id) {
+                <li [class.done]="isChecked(i.id)">
+                  <label>
+                    <input type="checkbox" [checked]="isChecked(i.id)" (change)="toggle(i.id)" />
+                    <span class="line">
+                      <span class="qty">{{ formatQty(i.quantity) }}</span>
+                      @if (i.unit) { {{ i.unit }} }
+                      {{ i.ingredients.name }}
+                      @if (i.grams) { <span class="muted">({{ i.grams }} g)</span> }
+                      @if (i.note) { <span class="muted">, {{ i.note }}</span> }
+                    </span>
+                  </label>
                 </li>
               }
-            </ul>
-          }
+          </ul>
+        }
         </section>
 
         <section class="panel">

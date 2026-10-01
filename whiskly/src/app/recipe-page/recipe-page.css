@@ -41,6 +41,7 @@
   border: 1px solid var(--border);
   border-radius: 14px;
 }
+
 .panel h2 { margin: 0 0 0.5rem; font-size: 1.2rem; }
 
 .section-name {
@@ -50,6 +51,52 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent);
+}
+
+.panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.panel-head h2 { margin: 0;}
+.count {font-size: 0.85rem; color: var(--muted); }
+
+.all-set { margin: 0.5rem 0 0; color: var(--accent); font-weight:600; }
+
+.clear {
+  margin: 0.5rem;
+  padding:0.25rem 0.75rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.clear:hover { color: var(--accent); border-color: var(--accent); }
+
+.ingredients label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.ingredients input[type="checkbox"]{
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.2rem;
+  accent-color: var(--accent);
+}
+
+.ingredients li.done .line {
+  opacity: 0.45;
+  text-decoration: line-through;
 }
 
 .ingredients { list-style: none; margin: 0; padding: 0; }
