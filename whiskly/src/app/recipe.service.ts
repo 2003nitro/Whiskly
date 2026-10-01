@@ -12,6 +12,7 @@ export interface RecipeSummary {
 }
 
 export interface RecipeIngredient {
+  id: number;
   quantity: number;
   unit: string | null;
   grams: number | null;
@@ -51,7 +52,7 @@ export class RecipeService {
         id, title, servings, yield_unit, total_minutes, prep_minutes, cook_minutes,
         tags, source_url, instructions,
         recipe_ingredients (
-          quantity, unit, grams, note, section, sort_order,
+          id, quantity, unit, grams, note, section, sort_order,
           ingredients ( name )
         )
       `)

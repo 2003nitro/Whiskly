@@ -11,10 +11,54 @@ import { RecipeDetail, RecipeIngredient, RecipeService } from '../recipe.service
 export class RecipePage {
   private service = inject(RecipeService);
   private route = inject(ActivatedRoute);
+  private recipeId = 0;
+  checked = signal<Set<number>>(new Set());
 
   recipe = signal<RecipeDetail | null>(null);
   loading = signal(true);
   error = signal(false);
+
+  totalIngredients = computed(() => this.recipe()?.recipe_ingredients.length ?? 0);
+  checkedCount = computed(() => {
+  const ids = new Set(this.recipe()?.recipe_ingredients.map(i => i.id));
+  return [...this.checked()].filter(id => ids.has(id)).length;
+});
+
+   isChecked(id: number): boolean {
+    return this.checked().has(id);
+  }
+
+  toggle(id: number): void{
+    const next = new Set(this.checked());
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    this.checked.set(next);
+    this.save();
+  }
+  
+  clearChecks(): void{
+    this.checked.set(new Set());
+    this.save();
+  }
+
+  private storeageKey(): string {
+    return 'whiskly:checked:${this.recipeId}';
+  }
+
+  private load(): void {
+    try{
+      const raw = localStorage.getItem(this.storeageKey());
+      if (raw) this.checked.set(new Set(JSON.parse(raw) as number[]));
+    } catch {
+    }
+  }
+
+  private save(): void {
+    try{
+      localStorage.setItem(this.storeageKey(), JSON.stringify([...this.checked()]));
+    } catch {
+    }
+  }
 
   // ingredients grouped by section (Streusel, Cookies, Glaze...) in their saved order
   sections = computed(() => {
@@ -44,9 +88,12 @@ export class RecipePage {
   });
 
   constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.service.getRecipe(id)
-      .then(r => this.recipe.set(r))
+    this.recipeId = Number(this.route.snapshot.paramMap.get('id'));
+    this.service.getRecipe(this.recipeId)
+      .then(r => {
+        this.recipe.set(r);
+        this.load();
+      })
       .catch(() => this.error.set(true))
       .finally(() => this.loading.set(false));
   }
@@ -75,4 +122,6 @@ export class RecipePage {
     if (!best[1]) return String(whole);
     return whole ? `${whole} ${best[1]}` : best[1];
   }
+
+ 
 }
