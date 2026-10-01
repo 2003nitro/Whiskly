@@ -11,25 +11,27 @@
 
   <ul class="grid">
     @for (r of recipes(); track r.id) {
-      <li class="card">
-        <h2 class="title">{{ r.title }}</h2>
+      <li>
+        <a class="card" [routerLink]="['/recipe', r.id]">
+          <h2 class="title">{{ r.title }}</h2>
 
-        <div class="meta">
-          @if (r.total_minutes) {
-            <span class="pill time">⏱ {{ formatTime(r.total_minutes) }}</span>
-          }
-          @if (r.servings) {
-            <span class="pill">{{ r.servings }} {{ r.yield_unit }}</span>
-          }
-        </div>
-
-        @if (r.tags.length) {
-          <div class="tags">
-            @for (t of r.tags; track t) {
-              <span class="tag">{{ t }}</span>
+          <div class="meta">
+            @if (r.total_minutes) {
+              <span class="pill time">⏱ {{ formatTime(r.total_minutes) }}</span>
+            }
+            @if (r.servings) {
+              <span class="pill">{{ r.servings }} {{ r.yield_unit }}</span>
             }
           </div>
-        }
+
+          @if (r.tags.length) {
+            <div class="tags">
+              @for (t of r.tags; track t) {
+                <span class="tag">{{ t }}</span>
+              }
+            </div>
+          }
+        </a>
       </li>
     }
   </ul>

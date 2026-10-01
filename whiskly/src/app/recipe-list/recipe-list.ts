@@ -1,8 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { RecipeService, RecipeSummary } from '../recipe.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
+  imports: [RouterLink],
   templateUrl: './recipe-list.html',
   styleUrl: './recipe-list.css',
 })

@@ -1,1 +1,63 @@
-<p>recipe-page works!</p>
+<a class="back" routerLink="/">← All recipes</a>
+
+@if (loading()) {
+  <p class="status">Loading recipe...</p>
+} @else if (error()) {
+  <p class="status error">Couldn't load this recipe. Try refreshing the page.</p>
+} @else {
+  @if (recipe(); as r) {
+    <article>
+      <h1 class="title">{{ r.title }}</h1>
+
+      <div class="meta">
+        @if (r.prep_minutes) { <span class="pill">Prep {{ formatTime(r.prep_minutes) }}</span> }
+        @if (r.cook_minutes) { <span class="pill">Cook {{ formatTime(r.cook_minutes) }}</span> }
+        @if (r.total_minutes) { <span class="pill time">Total {{ formatTime(r.total_minutes) }}</span> }
+        @if (r.servings) { <span class="pill">Makes {{ r.servings }} {{ r.yield_unit }}</span> }
+      </div>
+
+      @if (r.tags.length) {
+        <div class="tags">
+          @for (t of r.tags; track t) { <span class="tag">{{ t }}</span> }
+        </div>
+      }
+
+      <div class="layout">
+        <section class="panel">
+          <h2>Ingredients</h2>
+          @for (g of sections(); track g.name) {
+            @if (g.name) { <h3 class="section-name">{{ g.name }}</h3> }
+            <ul class="ingredients">
+              @for (i of g.items; track $index) {
+                <li>
+                  <span class="qty">{{ formatQty(i.quantity) }}</span>
+                  @if (i.unit) { {{ i.unit }} }
+                  {{ i.ingredients.name }}
+                  @if (i.grams) { <span class="muted">({{ i.grams }} g)</span> }
+                  @if (i.note) { <span class="muted">, {{ i.note }}</span> }
+                </li>
+              }
+            </ul>
+          }
+        </section>
+
+        <section class="panel">
+          <h2>Instructions</h2>
+          @for (line of instructionLines(); track $index) {
+            @if (line.heading) {
+              <h3 class="section-name">{{ line.text }}</h3>
+            } @else {
+              <p class="step">{{ line.text }}</p>
+            }
+          }
+        </section>
+      </div>
+
+      @if (r.source_url) {
+        <p class="source"><a [href]="r.source_url" target="_blank" rel="noopener">Original recipe ↗</a></p>
+      }
+    </article>
+  } @else {
+    <p class="status">Recipe not found.</p>
+  }
+}
