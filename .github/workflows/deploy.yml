@@ -11,6 +11,9 @@ permissions:
 jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: whiskly
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -20,9 +23,12 @@ jobs:
               with:
                   node-version: '24'
                   cache: 'npm'
+                  cache-dependency-path: whiskly/package-lock.json
 
             - name: Install dependencies
               run: npm install
 
             - name: Build and deploy the Recipe Book
               run: npm run deploy
+              env:
+                GH_TOKEN: ${{ secrets.GIUTHUB_TOKEN }}
