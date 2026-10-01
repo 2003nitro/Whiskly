@@ -28,7 +28,14 @@ jobs:
             - name: Install dependencies
               run: npm install
 
-            - name: Build and deploy the Recipe Book
-              run: npm run deploy
-              env:
-                GH_TOKEN: ${{ secrets.GIUTHUB_TOKEN }}
+            - name: Build
+              run: npx ng build --configuration=production --base-href=/Whiskly/
+
+            - name: Show build output
+              run: ls -R dist | head -40
+
+            - name: Deploy to GitHub Pages
+              run: npx angular-cli-ghpages --dir=dist/whiskly/browser
+              env: 
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
