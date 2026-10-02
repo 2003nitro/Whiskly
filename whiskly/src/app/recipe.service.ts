@@ -38,7 +38,7 @@ export class RecipeService {
   async getRecipes(): Promise<RecipeSummary[]> {
     const { data, error } = await this.supabase
       .from('recipes')
-      .select('id, title, servings, yield_unit, total_minutes, tags')
+      .select('id, title, servings, yield_unit, total_minutes, tags, rating')
       .order('title');
     if (error) throw error;
     return data ?? [];

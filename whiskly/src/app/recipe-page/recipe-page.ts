@@ -13,6 +13,7 @@ export class RecipePage {
   private route = inject(ActivatedRoute);
   private recipeId = 0;
   checked = signal<Set<number>>(new Set());
+  doneSteps = signal<Set<number>>(new Set());
 
   recipe = signal<RecipeDetail | null>(null);
   loading = signal(true);
@@ -28,6 +29,10 @@ export class RecipePage {
     return this.checked().has(id);
   }
 
+  isStepDone(index: number): boolean {
+    return this.doneSteps().has(index);
+  }
+
   toggle(id: number): void{
     const next = new Set(this.checked());
     if (next.has(id)) next.delete(id);
@@ -35,6 +40,28 @@ export class RecipePage {
     this.checked.set(next);
     this.save();
   }
+
+  toggleStep(index: number): void{
+    const next = new Set(this.doneSteps());
+    if (next.has(index)) next.delete(index);
+    else next.add(index);
+    this.doneSteps.set(next);
+    this.saveSteps();
+  }
+
+  clearSteps(): void{
+    this.doneSteps.set(new Set());
+    this.saveSteps();
+  }
+
+  private saveSteps(): void {
+    try{
+      localStorage.setItem(this.stepsStorageKey(), JSON.stringify([...this.doneSteps()]));
+    } catch {
+    }
+  }
+
+
   
   clearChecks(): void{
     this.checked.set(new Set());
@@ -42,13 +69,19 @@ export class RecipePage {
   }
 
   private storeageKey(): string {
-    return 'whiskly:checked:${this.recipeId}';
+    return `whiskly:checked:${this.recipeId}`;
+  }
+
+  private stepsStorageKey(): string {
+    return `whiskly:steps:${this.recipeId}`;
   }
 
   private load(): void {
     try{
-      const raw = localStorage.getItem(this.storeageKey());
-      if (raw) this.checked.set(new Set(JSON.parse(raw) as number[]));
+      const ing = localStorage.getItem(this.storeageKey());
+      if (ing) this.checked.set(new Set(JSON.parse(ing) as number[]));
+      const steps = localStorage.getItem(this.stepsStorageKey());
+      if (steps) this.doneSteps.set(new Set(JSON.parse(steps) as number[]));
     } catch {
     }
   }
