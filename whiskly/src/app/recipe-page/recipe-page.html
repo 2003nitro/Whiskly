@@ -1,4 +1,4 @@
-<a class="back" routerLink="/">← All recipes</a>
+<button type="button" class="back" (click)="goBack()">← Back</button>
 
 @if (loading()) {
   <p class="status">Loading recipe...</p>
