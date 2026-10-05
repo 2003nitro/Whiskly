@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { RecipeDetail, RecipeIngredient, RecipeService } from '../recipe.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-recipe-page',
@@ -12,6 +13,8 @@ export class RecipePage {
   private service = inject(RecipeService);
   private route = inject(ActivatedRoute);
   private recipeId = 0;
+  private location = inject(Location);
+
   checked = signal<Set<number>>(new Set());
   doneSteps = signal<Set<number>>(new Set());
 
@@ -24,6 +27,10 @@ export class RecipePage {
   const ids = new Set(this.recipe()?.recipe_ingredients.map(i => i.id));
   return [...this.checked()].filter(id => ids.has(id)).length;
 });
+
+  goBack(): void {
+    this.location.back();
+  }
 
    isChecked(id: number): boolean {
     return this.checked().has(id);
@@ -61,8 +68,6 @@ export class RecipePage {
     }
   }
 
-
-  
   clearChecks(): void{
     this.checked.set(new Set());
     this.save();

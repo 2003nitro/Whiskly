@@ -1,0 +1,13 @@
+<h1 class="page-title">What are you making?</h1>
+<p class="subtitle">Pick a category</p>
+
+<ul class="grid">
+  @for (c of categories; track c.slug) {
+    <li>
+      <a class="tile" [class.all]="c.slug === 'all'" [routerLink]="['/category', c.slug]">
+        <span class="emoji" aria-hidden="true">{{ c.emoji }}</span>
+        <span class="label">{{ c.label }}</span>
+      </a>
+    </li>
+  }
+</ul>
