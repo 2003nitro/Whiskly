@@ -9,6 +9,7 @@ export interface RecipeSummary {
   yield_unit: string | null;
   total_minutes: number | null;
   tags: string[];
+  rating: number | null;
 }
 
 export interface RecipeIngredient {
