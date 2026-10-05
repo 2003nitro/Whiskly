@@ -14,7 +14,13 @@
       <li>
         <a class="card" [routerLink]="['/recipe', r.id]">
           <h2 class="title">{{ r.title }}</h2>
-
+          <div class="meta">
+            @if (r.rating) {
+                <span class="pill">⭐ {{ r.rating }}/10</span>
+            } @else {
+                <span class="pill">No Rating</span>
+            }
+          </div>
           <div class="meta">
             @if (r.total_minutes) {
               <span class="pill time">⏱ {{ formatTime(r.total_minutes) }}</span>

@@ -59,11 +59,22 @@
 
         <section class="panel">
           <h2>Instructions</h2>
+          @if (doneSteps().size > 0){
+            <button type="button" class="clear" (click)="clearSteps()">Reset Steps</button>
+          }
           @for (line of instructionLines(); track $index) {
             @if (line.heading) {
-              <h3 class="section-name">{{ line.text }}</h3>
+              <h3 class="section-name">{{ line.heading }}</h3>
             } @else {
-              <p class="step">{{ line.text }}</p>
+              <p class="step"
+                [class.done]="isStepDone($index)"
+                role="button"
+                tabindex="0"
+                (click)="toggleStep($index)"
+                (keydown.enter)="toggleStep($index)"
+                (keydown.space)="toggleStep($index)">
+                {{ line.text }}
+              </p>
             }
           }
         </section>
