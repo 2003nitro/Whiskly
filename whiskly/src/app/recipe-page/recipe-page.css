@@ -119,5 +119,56 @@
   border-radius: 4px;
 }
 
+.scale{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 1.25rem;
+}
+
+.scale-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.scale-buttons { display: flex; gap: 0.5rem; }
+
+.scale-btn {
+  min-width: 3rem;
+  padding: 0.35rem 0.8rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.scale-button:hover { color: var(--accent); border-color: var(--accent); }
+.scale-btn.active { 
+  color: #1a1209;
+  background: var(--accent); 
+  border-color: var(--accent);
+  font-weight: 600;
+ }
+
+.scale-custom { display: flex; align-items: center; gap: 0.4rem;}
+.scale-custom input {
+  width: 4.5rem;
+  padding: 0.3rem 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.scale-custom input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
 .source { margin-top: 1.5rem; }
 .source a { color: var(--accent); }

@@ -13,7 +13,7 @@
         @if (r.prep_minutes) { <span class="pill">Prep {{ formatTime(r.prep_minutes) }}</span> }
         @if (r.cook_minutes) { <span class="pill">Cook {{ formatTime(r.cook_minutes) }}</span> }
         @if (r.total_minutes) { <span class="pill time">Total {{ formatTime(r.total_minutes) }}</span> }
-        @if (r.servings) { <span class="pill">Makes {{ r.servings }} {{ r.yield_unit }}</span> }
+        @if (r.servings) { <span class="pill">Makes {{ formatQty(r.servings * multiplier()) }} {{ r.yield_unit }}</span> }
       </div>
 
       @if (r.tags.length) {
@@ -21,6 +21,25 @@
           @for (t of r.tags; track t) { <span class="tag">{{ t }}</span> }
         </div>
       }
+      
+      <div class="scale">
+        <span class="scale-label">Scale</span>
+
+        <div class="scale-controls">
+          @for (m of preset; track m) {
+            <button type="button" class="scale-btn" [class.active]="multiplier() === m"
+              (click)="setMultiplier(m)">{{ m === 0.5 ? '1/2' : m}}x</button>
+          }
+        </div>
+
+        <label class="scale-custom">
+          <span class="muted">Custom</span>
+          <input type="number" min="0.25" step="0.25" inputmode="decimal"
+            [value]="multiplier()" (input)="onMultiplierInput($event)" />
+          <span class="muted">x</span>
+        </label>
+      </div>
+
 
       <div class="layout">
         <section class="panel">
@@ -44,10 +63,10 @@
                   <label>
                     <input type="checkbox" [checked]="isChecked(i.id)" (change)="toggle(i.id)" />
                     <span class="line">
-                      <span class="qty">{{ formatQty(i.quantity) }}</span>
+                      <span class="qty">{{ formatQty(i.quantity * multiplier()) }}</span>
                       @if (i.unit) { {{ i.unit }} }
                       {{ i.ingredients.name }}
-                      @if (i.grams) { <span class="muted">({{ i.grams }} g)</span> }
+                      @if (i.grams) { <span class="muted">({{ formatQty(i.grams * multiplier()) }} g)</span> }
                       @if (i.note) { <span class="muted">, {{ i.note }}</span> }
                     </span>
                   </label>
@@ -64,7 +83,7 @@
           }
           @for (line of instructionLines(); track $index) {
             @if (line.heading) {
-              <h3 class="section-name">{{ line.heading }}</h3>
+              <h3 class="section-name">{{ line.text }}</h3>
             } @else {
               <p class="step"
                 [class.done]="isStepDone($index)"
