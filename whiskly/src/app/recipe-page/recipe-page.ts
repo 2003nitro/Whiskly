@@ -22,14 +22,29 @@ export class RecipePage {
   loading = signal(true);
   error = signal(false);
 
+  // Multiplier Variables
+  multiplier = signal(1);
+  preset = [0.5, 1, 2, 3]
+
   totalIngredients = computed(() => this.recipe()?.recipe_ingredients.length ?? 0);
   checkedCount = computed(() => {
   const ids = new Set(this.recipe()?.recipe_ingredients.map(i => i.id));
   return [...this.checked()].filter(id => ids.has(id)).length;
 });
 
-  goBack(): void {
-    this.location.back();
+
+  setMultiplier(value: number) {
+    if (Number.isFinite(value) && value > 0 && value <= 5) {
+      this.multiplier.set(value);
+    }
+  }
+
+  onMultiplierInput(event: Event): void {
+    this.setMultiplier(parseFloat((event.target as HTMLInputElement).value));
+  }
+
+  formatGrams(grams: number): string {
+    return String(Math.round(grams * this.multiplier()));
   }
 
    isChecked(id: number): boolean {
