@@ -36,13 +36,19 @@ export class RecipeService {
   private supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
   // all recipes, for the list page
-  async getRecipes(): Promise<RecipeSummary[]> {
-    const { data, error } = await this.supabase
+  async getRecipes(category?: string): Promise<RecipeSummary[]> {
+    let query = this.supabase
       .from('recipes')
       .select('id, title, servings, yield_unit, total_minutes, tags, rating')
       .order('title');
-    if (error) throw error;
-    return data ?? [];
+
+      if (category && category !== 'all'){
+        query = query.contains('categories', [category]);
+      
+      }
+      const { data, error } = await query;
+      if (error) throw error;
+      return data ?? [];
   }
 
   // one recipe with its ingredients, for the recipe page

@@ -1,11 +1,12 @@
-<h1 class="page-title">All Recipes</h1>
+<a class="back" routerLink="/">← Categories</a>
+<h1 class="page-title">{{ title }}</h1>
 
 @if (loading()) {
   <p class="status">Loading recipes...</p>
 } @else if (error()) {
   <p class="status error">Couldn't load recipes. Try refreshing the page.</p>
 } @else if (recipes().length === 0) {
-  <p class="status">No recipes yet.</p>
+  <p class="status">No recipes in this category yet.</p>
 } @else {
   <p class="subtitle">{{ recipes().length }} saved</p>
 
