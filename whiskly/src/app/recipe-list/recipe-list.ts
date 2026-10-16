@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed} from '@angular/core';
 import { RecipeService, RecipeSummary } from '../recipe.service';
 import { RouterLink } from '@angular/router';
+import { PreferencesService } from '../preferences.service';
 
 @Component({
   selector: 'app-recipe-list',
@@ -19,6 +20,22 @@ export class RecipeList {
       .then(r => this.recipes.set(r))
       .catch(() => this.error.set(true))
       .finally(() => this.loading.set(false));
+  }
+
+
+  prefs = inject(PreferencesService);
+  hasPhoto = computed(() => this.recipes().some(r => !!r.image_path));
+
+  photo(r: RecipeSummary): string | null {
+    return this.service.photoUrl(r.image_path);
+  }
+
+  onTogglePhotos(event: Event): void {
+    this.prefs.setShowPhotos((event.target as HTMLInputElement).checked);
+  }
+
+  hideBroken(event: Event): void {
+    (event.target as HTMLInputElement).style.display = 'none';
   }
 
   formatTime(minutes: number): string {

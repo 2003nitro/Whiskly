@@ -172,3 +172,75 @@
 
 .source { margin-top: 1.5rem; }
 .source a { color: var(--accent); }
+
+.hero { position: relative; }
+
+.hero.has-photo {
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(14rem, 42vw, 22rem);
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(18, 16, 14, 0.92) 0%,
+    rgba(18, 16, 14, 0.55) 45%,
+    rgba(18, 16, 14, 0.05) 100%
+  );
+  transition: opacity 0.25s ease;
+}
+
+.hero.has-photo .hero-text {
+  position: relative;
+  width: 100%;
+  padding: 1.25rem;
+  transition: opacity 0.25s ease;
+}
+.hero.has-photo .title { text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
+.hero.has-photo .pill {
+  color: var(--text);
+  background: rgba(18, 16, 14, 0.65);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.hero.has-photo .pill.time { color: var(--accent); border-color: rgba(240, 160, 75, 0.5); }
+
+/* clear view: fade the gradient and text, leaving just the photo */
+.hero.clear .hero-shade,
+.hero.clear .hero-text { opacity: 0; }
+.hero.clear .hero-text { pointer-events: none; }
+
+.view-toggle {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 1;
+  padding: 0.3rem 0.8rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: rgba(18, 16, 14, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.view-toggle:hover { border-color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shade, .hero.has-photo .hero-text { transition: none; }
+}

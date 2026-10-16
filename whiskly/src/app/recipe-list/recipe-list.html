@@ -7,12 +7,27 @@
 } @else if (recipes().length === 0) {
   <p class="status">No recipes yet.</p>
 } @else {
-  <p class="subtitle">{{ recipes().length }} saved</p>
+  <div class="list-head">
+    <p class="subtitle">{{ recipes().length }} saved</p>
+    @if (hasPhoto()) {
+      <label class="switch">
+        <input type="checkbox" role="switch" 
+          [checked]="prefs.showPhotos()" (change)="onTogglePhotos($event)" />
+        <span class="track"></span>
+        <span>Photos </span>
+      </label>
+    }
+  </div>
 
   <ul class="grid">
     @for (r of recipes(); track r.id) {
       <li>
         <a class="card" [routerLink]="['/recipe', r.id]">
+          @if (prefs.showPhotos()){
+            @if (photo(r); as src){
+              <img class="thumb" [src]="src" alt="" loading="lazy" (error)="hideBroken($event)" />
+            }
+          }
           <h2 class="title">{{ r.title }}</h2>
           <div class="meta">
             @if (r.rating) {

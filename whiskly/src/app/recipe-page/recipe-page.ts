@@ -23,6 +23,11 @@ export class RecipePage {
   multiplier = signal(1);
   preset = [0.5, 1, 2, 3]
 
+
+  photoFailed = signal(false);
+  clearView = signal(false);
+
+
   totalIngredients = computed(() => this.recipe()?.recipe_ingredients.length ?? 0);
   checkedCount = computed(() => {
   const ids = new Set(this.recipe()?.recipe_ingredients.map(i => i.id));
@@ -42,6 +47,13 @@ export class RecipePage {
 
   formatGrams(grams: number): string {
     return String(Math.round(grams * this.multiplier()));
+  }
+
+
+  photo = computed(() => this.photoFailed() ? null : this.service.photoUrl(this.recipe()?.image_path));
+
+  toggleClear(): void {
+    if (this.photo()) this.clearView.update(v => !v);
   }
 
    isChecked(id: number): boolean {

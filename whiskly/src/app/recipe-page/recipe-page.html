@@ -7,13 +7,27 @@
 } @else {
   @if (recipe(); as r) {
     <article>
-      <h1 class="title">{{ r.title }}</h1>
+      <div class="hero" [class.has-photo]="photo()" [class.clear]="clearView()" (click)="toggleClear()">
+        @if (photo(); as src) {
+          <img class="hero-img" [src]="src" [alt]="'Photo of ' + r.title" (error)="photoFailed.set(true)" />
+          <div class="hero-shade"></div>
+          <button type="button" class="view-toggle"
+                  [attr.aria-pressed]="clearView()"
+                  (click)="toggleClear(); $event.stopPropagation()">
+            {{ clearView() ? 'Show text' : '👁 Clear view' }}
+          </button>
+        }
 
-      <div class="meta">
-        @if (r.prep_minutes) { <span class="pill">Prep {{ formatTime(r.prep_minutes) }}</span> }
-        @if (r.cook_minutes) { <span class="pill">Cook {{ formatTime(r.cook_minutes) }}</span> }
-        @if (r.total_minutes) { <span class="pill time">Total {{ formatTime(r.total_minutes) }}</span> }
-        @if (r.servings) { <span class="pill">Makes {{ formatQty(r.servings * multiplier()) }} {{ r.yield_unit }}</span> }
+        <div class="hero-text">
+          <h1 class="title">{{ r.title }}</h1>
+
+          <div class="meta">
+            @if (r.prep_minutes) { <span class="pill">Prep {{ formatTime(r.prep_minutes) }}</span> }
+            @if (r.cook_minutes) { <span class="pill">Cook {{ formatTime(r.cook_minutes) }}</span> }
+            @if (r.total_minutes) { <span class="pill time">Total {{ formatTime(r.total_minutes) }}</span> }
+            @if (r.servings) { <span class="pill">Makes {{ formatQty(r.servings * multiplier()) }} {{ r.yield_unit }}</span> }
+          </div>
+        </div>
       </div>
 
       @if (r.tags.length) {
