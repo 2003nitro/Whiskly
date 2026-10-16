@@ -1,6 +1,5 @@
 import { Component, inject, signal, computed} from '@angular/core';
 import { RecipeService, RecipeSummary } from '../recipe.service';
-import { RouterLink } from '@angular/router';
 import { PreferencesService } from '../preferences.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CATEGORIES } from '../categories';
