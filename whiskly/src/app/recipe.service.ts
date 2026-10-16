@@ -10,6 +10,7 @@ export interface RecipeSummary {
   total_minutes: number | null;
   tags: string[];
   rating: number | null;
+  image_path: string | null;
 }
 
 export interface RecipeIngredient {
@@ -39,7 +40,7 @@ export class RecipeService {
   async getRecipes(category?: string): Promise<RecipeSummary[]> {
     let query = this.supabase
       .from('recipes')
-      .select('id, title, servings, yield_unit, total_minutes, tags, rating')
+      .select('id, title, servings, yield_unit, total_minutes, tags, rating, image_path')
       .order('title');
 
       if (category && category !== 'all'){
@@ -57,7 +58,7 @@ export class RecipeService {
       .from('recipes')
       .select(`
         id, title, servings, yield_unit, total_minutes, prep_minutes, cook_minutes,
-        tags, source_url, instructions,
+        tags, source_url, instructions, image_path,
         recipe_ingredients (
           id, quantity, unit, grams, note, section, sort_order,
           ingredients ( name )
@@ -67,5 +68,10 @@ export class RecipeService {
       .maybeSingle();
     if (error) throw error;
     return data as unknown as RecipeDetail | null;
+  }
+
+  photoUrl(path: string | null | undefined): string | null {
+    if (!path) return null;
+    return this.supabase.storage.from('recipe-photos').getPublicUrl(path).data.publicUrl;
   }
 }
