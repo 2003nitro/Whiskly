@@ -77,7 +77,9 @@
                   <label>
                     <input type="checkbox" [checked]="isChecked(i.id)" (change)="toggle(i.id)" />
                     <span class="line">
-                      <span class="qty">{{ formatQty(i.quantity * multiplier()) }}</span>
+                      @if (i.quantity !== null) {
+                        <span class="qty">{{ formatQty(i.quantity * multiplier()) }}</span>
+                      }
                       @if (i.unit) { {{ i.unit }} }
                       {{ i.ingredients.name }}
                       @if (i.grams) { <span class="muted">({{ formatQty(i.grams * multiplier()) }} g)</span> }

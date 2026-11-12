@@ -15,7 +15,7 @@ export interface RecipeSummary {
 
 export interface RecipeIngredient {
   id: number;
-  quantity: number;
+  quantity: number | null;
   unit: string | null;
   grams: number | null;
   note: string | null;
