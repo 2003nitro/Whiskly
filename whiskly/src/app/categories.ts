@@ -7,6 +7,7 @@ export interface Category {
 export const CATEGORIES: Category[] = [
     { slug: 'breakfast', label: 'Breakfast', emoji: '🍳' },
     { slug: 'lunch', label: 'Lunch', emoji: '🥪' },
+    { slug: 'side', label: 'Side', emoji: '🥗' },
     { slug: 'dinner', label: 'Dinner', emoji: '🍲' },
     { slug: 'dessert', label: 'Dessert', emoji: '🍰' },
     { slug: 'snack', label: 'Snack', emoji: '🍿' },
