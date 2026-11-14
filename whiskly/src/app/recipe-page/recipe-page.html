@@ -83,7 +83,7 @@
                       @if (i.unit) { {{ i.unit }} }
                       {{ i.ingredients.name }}
                       @if (i.grams) { <span class="muted">({{ formatQty(i.grams * multiplier()) }} g)</span> }
-                      @if (i.note) { <span class="muted">, {{ i.note }}</span> }
+                      @if (i.note) { <span class="muted">, {{ scaleText(i.note) }}</span> }
                     </span>
                   </label>
                 </li>

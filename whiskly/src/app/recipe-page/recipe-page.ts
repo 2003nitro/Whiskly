@@ -142,6 +142,36 @@ export class RecipePage {
     return groups;
   });
 
+
+  scaleText(text: string): string {
+    const m = this.multiplier();
+    return text.replace(
+      /\{(\d+\s\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?)\s*([^}]*)\}/g,
+      (_match: string, qty: string, rest: string) => {
+        const value = this.parseQty(qty) * m;
+        return `${this.formatQty(value)} ${this.pluralize(rest.trim(), value)}`.trim();
+      }
+    );
+  }
+
+  private parseQty(s: string): number {
+    return s.trim().split(/\s+/).reduce((sum, part) => {
+      if (part.includes('/')) {
+        const [a, b] = part.split('/').map(Number);
+        return sum + a / b;
+      }
+      return sum + Number(part);
+    }, 0);
+  }
+
+  private pluralize(unit: string, value: number): string {
+    const plurals: Record<string, string> = {
+      cup: 'cups', tablespoon: 'tablespoons', teaspoon: 'teaspoons', gram: 'grams', ounce: 'ounces', pound: 'pounds', clove: 'cloves', slice: 'slices', milliliter: 'milliliters', liter: 'liters', pinch: 'pinches', dash: 'dashes', piece: 'pieces', stick: 'sticks', can: 'cans', package: 'packages', box: 'boxes', bag: 'bags'
+    }
+    return value > 1 && plurals[unit] ? plurals[unit] : unit;
+  }
+
+
   // splits the instructions text into lines; ALL-CAPS lines become headings
   instructionLines = computed(() => {
     const text = this.recipe()?.instructions ?? '';
@@ -149,7 +179,10 @@ export class RecipePage {
       .split('\n')
       .map(line => line.trim())
       .filter(line => line.length > 0)
-      .map(line => ({ text: line, heading: /^[A-Z ]+$/.test(line) }));
+      .map(line => {
+        const heading = /^[A-Z ]+$/.test(line);
+        return { text: heading ? line : this.scaleText(line), heading };
+      });
   });
 
   constructor() {
